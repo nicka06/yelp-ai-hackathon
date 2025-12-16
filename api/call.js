@@ -96,16 +96,35 @@ module.exports = async (req, res) => {
     console.log('Phone Number ID (full):', agentPhoneNumberId);
     console.log('API Key (first 10 chars):', elevenLabsApiKey.substring(0, 10) + '...');
     
-    const response = await axios.post(
-      endpoint,
-      requestBody,
-      {
-        headers: {
-          'xi-api-key': elevenLabsApiKey,
-          'Content-Type': 'application/json',
-        },
+    // Return immediately to user
+    res.status(200).json({
+      success: true,
+      message: 'Call will be initiated in 60 seconds...',
+      countdown: 60,
+    });
+
+    // Make the call asynchronously after 60 seconds (don't await - let it run in background)
+    // Note: This requires Vercel Pro for 60+ second execution time, or use a queue service
+    setTimeout(async () => {
+      try {
+        console.log('60 seconds elapsed, initiating call now...');
+        const response = await axios.post(
+          endpoint,
+          requestBody,
+          {
+            headers: {
+              'xi-api-key': elevenLabsApiKey,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        console.log('Call initiated successfully:', response.data);
+      } catch (error) {
+        console.error('Error initiating call after delay:', error.response?.data || error.message);
       }
-    );
+    }, 60000);
+    
+    console.log('Response sent, call will be initiated in 60 seconds...');
 
     return res.status(200).json({
       success: true,

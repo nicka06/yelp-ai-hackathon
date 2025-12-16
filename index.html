@@ -108,6 +108,9 @@
             color: #0c5460;
             border: 1px solid #bee5eb;
         }
+        .status.info {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -149,7 +152,6 @@
 
             const btn = document.getElementById('callBtn');
             btn.disabled = true;
-            btn.textContent = 'Calling...';
 
             try {
                 const response = await fetch(`${API_URL}/api/call`, {
@@ -161,14 +163,31 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    showStatus('✅ Call initiated! You should receive a call shortly.', 'success');
+                    // Start countdown
+                    let countdown = 60;
+                    const countdownInterval = setInterval(() => {
+                        countdown--;
+                        btn.textContent = `⏱️ Call in ${countdown}s...`;
+                        showStatus(`⏱️ Call will be initiated in ${countdown} seconds...`, 'info');
+                        
+                        if (countdown <= 0) {
+                            clearInterval(countdownInterval);
+                            btn.textContent = '✅ Call initiated!';
+                            showStatus('✅ Call initiated! You should receive a call shortly.', 'success');
+                            setTimeout(() => {
+                                btn.disabled = false;
+                                btn.textContent = '📞 Call Me Now';
+                            }, 3000);
+                        }
+                    }, 1000);
                 } else {
                     showStatus(`❌ Error: ${data.error || 'Failed to initiate call'}`, 'error');
+                    btn.disabled = false;
+                    btn.textContent = '📞 Call Me Now';
                 }
             } catch (error) {
                 console.error('Error:', error);
                 showStatus('❌ Error connecting to server. Make sure your API is configured.', 'error');
-            } finally {
                 btn.disabled = false;
                 btn.textContent = '📞 Call Me Now';
             }
