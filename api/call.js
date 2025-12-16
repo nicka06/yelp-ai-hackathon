@@ -1,23 +1,28 @@
 const axios = require('axios');
 
 module.exports = async (req, res) => {
-  // Enable CORS
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  );
+  try {
+    // Enable CORS
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    );
 
-  // Handle preflight
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+    // Handle preflight
+    if (req.method === 'OPTIONS') {
+      return res.status(200).end();
+    }
 
-  // Only allow POST requests
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    // Only allow POST requests
+    if (req.method !== 'POST') {
+      return res.status(405).json({ error: 'Method not allowed' });
+    }
+  } catch (error) {
+    console.error('Error in CORS/preflight:', error);
+    return res.status(500).json({ success: false, error: 'Internal server error' });
   }
 
   try {
@@ -40,8 +45,20 @@ module.exports = async (req, res) => {
     // Get environment variables
     const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
     const elevenLabsAgentId = process.env.ELEVENLABS_AGENT_ID;
+    const agentPhoneNumberId = process.env.ELEVENLABS_AGENT_PHONE_NUMBER_ID;
+
+    // Debug logging (will show in Vercel logs)
+    console.log('Environment check:', {
+      hasApiKey: !!elevenLabsApiKey,
+      hasAgentId: !!elevenLabsAgentId,
+      hasPhoneNumberId: !!agentPhoneNumberId,
+      apiKeyLength: elevenLabsApiKey?.length || 0,
+      agentIdPrefix: elevenLabsAgentId?.substring(0, 10) || 'missing',
+      phoneNumberIdPrefix: agentPhoneNumberId?.substring(0, 10) || 'missing',
+    });
 
     if (!elevenLabsApiKey) {
+      console.error('Missing ELEVENLABS_API_KEY');
       return res.status(500).json({ 
         success: false,
         error: 'ELEVENLABS_API_KEY not configured. Add it in Vercel environment variables.' 
@@ -49,16 +66,15 @@ module.exports = async (req, res) => {
     }
 
     if (!elevenLabsAgentId) {
+      console.error('Missing ELEVENLABS_AGENT_ID');
       return res.status(500).json({ 
         success: false,
         error: 'ELEVENLABS_AGENT_ID not configured. Add it in Vercel environment variables.' 
       });
     }
 
-    // Get agent phone number ID from environment (required for Twilio integration)
-    const agentPhoneNumberId = process.env.ELEVENLABS_AGENT_PHONE_NUMBER_ID;
-    
     if (!agentPhoneNumberId) {
+      console.error('Missing ELEVENLABS_AGENT_PHONE_NUMBER_ID');
       return res.status(500).json({ 
         success: false,
         error: 'ELEVENLABS_AGENT_PHONE_NUMBER_ID not configured. This is the Twilio phone number ID from your ElevenLabs agent settings.' 
@@ -76,8 +92,9 @@ module.exports = async (req, res) => {
 
     console.log('Making request to:', endpoint);
     console.log('Request body:', JSON.stringify(requestBody, null, 2));
-    console.log('Agent ID:', elevenLabsAgentId);
-    console.log('Phone Number ID:', agentPhoneNumberId);
+    console.log('Agent ID (full):', elevenLabsAgentId);
+    console.log('Phone Number ID (full):', agentPhoneNumberId);
+    console.log('API Key (first 10 chars):', elevenLabsApiKey.substring(0, 10) + '...');
     
     const response = await axios.post(
       endpoint,
