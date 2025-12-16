@@ -68,13 +68,20 @@ module.exports = async (req, res) => {
     // Make outbound call via ElevenLabs API (Twilio endpoint)
     const endpoint = 'https://api.elevenlabs.io/v1/convai/twilio/outbound-call';
     
+    const requestBody = {
+      agent_id: elevenLabsAgentId,
+      agent_phone_number_id: agentPhoneNumberId,
+      to_number: phoneNumber,
+    };
+
+    console.log('Making request to:', endpoint);
+    console.log('Request body:', JSON.stringify(requestBody, null, 2));
+    console.log('Agent ID:', elevenLabsAgentId);
+    console.log('Phone Number ID:', agentPhoneNumberId);
+    
     const response = await axios.post(
       endpoint,
-      {
-        agent_id: elevenLabsAgentId,
-        agent_phone_number_id: agentPhoneNumberId,
-        to_number: phoneNumber,
-      },
+      requestBody,
       {
         headers: {
           'xi-api-key': elevenLabsApiKey,
@@ -94,18 +101,37 @@ module.exports = async (req, res) => {
       message: error.message,
       response: error.response?.data,
       status: error.response?.status,
+      statusText: error.response?.statusText,
       config: {
         url: error.config?.url,
         method: error.config?.method,
+        data: error.config?.data,
       }
     };
     
-    console.error('Error details:', JSON.stringify(errorDetails, null, 2));
+    console.error('ElevenLabs API Error:', JSON.stringify(errorDetails, null, 2));
     
-    return res.status(500).json({
+    // More helpful error messages
+    let errorMessage = 'Failed to initiate call';
+    if (error.response?.status === 404) {
+      errorMessage = 'Not Found - Check that your agent_id and agent_phone_number_id are correct. Verify them in your ElevenLabs dashboard.';
+    } else if (error.response?.status === 401 || error.response?.status === 403) {
+      errorMessage = 'Authentication failed - Check your ELEVENLABS_API_KEY is correct and has the right permissions.';
+    } else if (error.response?.data?.detail) {
+      errorMessage = error.response.data.detail;
+    } else if (error.response?.data?.message) {
+      errorMessage = error.response.data.message;
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+    
+    return res.status(error.response?.status || 500).json({
       success: false,
-      error: error.response?.data?.message || error.response?.data?.detail || error.message || 'Failed to initiate call',
-      details: process.env.NODE_ENV === 'development' ? errorDetails : undefined,
+      error: errorMessage,
+      // Include helpful details in response for debugging
+      hint: error.response?.status === 404 
+        ? 'Verify your agent_id and agent_phone_number_id in ElevenLabs dashboard. Make sure the phone number is connected to your agent.'
+        : undefined,
     });
   }
 };
