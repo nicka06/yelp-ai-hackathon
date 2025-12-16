@@ -47,22 +47,24 @@ This guide will help you set up ElevenLabs and deploy this app to Vercel for fre
 
 ElevenLabs requires a Twilio phone number to make outbound calls.
 
-#### Option A: Use ElevenLabs' Twilio Integration (Easiest)
+1. **Set Up Twilio**:
+   - Go to [https://www.twilio.com](https://www.twilio.com)
+   - Sign up for a free account (you get $15.50 free credit)
+   - Go to **Phone Numbers** → **Buy a Number**
+   - Purchase a phone number (costs ~$1/month)
 
-1. In your ElevenLabs agent settings, look for **"Phone Number"** or **"Twilio"** section
-2. Follow the instructions to connect a Twilio number
-3. If you don't have Twilio, see Option B below
+2. **Connect Twilio to ElevenLabs**:
+   - In your ElevenLabs agent settings, go to **"Phone Numbers"** or **"Twilio"** section
+   - Connect your Twilio phone number to the agent
+   - **Copy the Agent Phone Number ID** - you'll need this!
+     - This is different from the agent ID
+     - It's the ID of the phone number connected to your agent
+     - It might look like: `phone_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx` or just a string ID
 
-#### Option B: Set Up Twilio Yourself
-
-1. Go to [https://www.twilio.com](https://www.twilio.com)
-2. Sign up for a free account (you get $15.50 free credit)
-3. Go to **Phone Numbers** → **Buy a Number**
-4. Purchase a phone number (costs ~$1/month)
-5. In ElevenLabs, connect this Twilio number to your agent
-6. You may need to configure webhooks - follow ElevenLabs' documentation
-
-**Note**: Check ElevenLabs' current documentation for the exact steps, as their interface may change.
+**Important**: You need THREE things from ElevenLabs:
+- `ELEVENLABS_API_KEY` (from Step 1.2)
+- `ELEVENLABS_AGENT_ID` (from Step 1.3)
+- `ELEVENLABS_AGENT_PHONE_NUMBER_ID` (from this step - the Twilio phone number ID)
 
 ## Step 2: Deploy to Vercel
 
@@ -107,12 +109,15 @@ Follow the prompts.
 ### 2.4 Add Environment Variables
 
 1. In your Vercel project dashboard, go to **Settings** → **Environment Variables**
-2. Add these variables:
+2. Add these THREE variables:
 
    ```
    ELEVENLABS_API_KEY = sk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    ELEVENLABS_AGENT_ID = agent_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+   ELEVENLABS_AGENT_PHONE_NUMBER_ID = phone_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    ```
+
+   **Important**: Make sure you have all three! The `ELEVENLABS_AGENT_PHONE_NUMBER_ID` is the Twilio phone number ID from your agent settings.
 
 3. Click **"Save"**
 4. **Redeploy** your project (go to Deployments → click the three dots → Redeploy)
