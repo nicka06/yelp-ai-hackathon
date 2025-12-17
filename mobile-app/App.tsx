@@ -35,11 +35,11 @@ export default function App() {
       <StatusBar style="dark" />
       <View style={styles.screenContainer}>{renderScreen()}</View>
       <View style={styles.tabBar}>
-        {renderTabButton("Home", "home-outline", activeTab, setActiveTab)}
-        {renderTabButton("Map", "map-outline", activeTab, setActiveTab)}
-        {renderTabButton("Favorites", "heart-outline", activeTab, setActiveTab)}
-        {renderTabButton("Rewards", "gift-outline", activeTab, setActiveTab)}
-        {renderTabButton("Profile", "person-outline", activeTab, setActiveTab)}
+        {renderTabButton("Home", "home", "home-outline", activeTab, setActiveTab)}
+        {renderTabButton("Map", "map", "map-outline", activeTab, setActiveTab)}
+        {renderTabButton("Favorites", "heart", "heart-outline", activeTab, setActiveTab)}
+        {renderTabButton("Rewards", "gift", "gift-outline", activeTab, setActiveTab)}
+        {renderTabButton("Profile", "person", "person-outline", activeTab, setActiveTab)}
       </View>
     </View>
   );
@@ -47,7 +47,8 @@ export default function App() {
 
 function renderTabButton(
   tab: TabName,
-  icon: keyof typeof Ionicons.glyphMap,
+  iconActive: keyof typeof Ionicons.glyphMap,
+  iconInactive: keyof typeof Ionicons.glyphMap,
   activeTab: TabName,
   setActiveTab: (t: TabName) => void
 ) {
@@ -57,13 +58,15 @@ function renderTabButton(
       key={tab}
       style={styles.tabButton}
       onPress={() => setActiveTab(tab)}
-      activeOpacity={0.8}
+      activeOpacity={0.7}
     >
-      <Ionicons
-        name={icon}
-        size={22}
-        color={isActive ? "#111827" : "#9CA3AF"}
-      />
+      <View style={[styles.tabIconContainer, isActive && styles.tabIconContainerActive]}>
+        <Ionicons
+          name={isActive ? iconActive : iconInactive}
+          size={22}
+          color={isActive ? "#FF6B35" : "#9CA3AF"}
+        />
+      </View>
       <Text style={[styles.tabLabel, isActive && styles.tabLabelActive]}>
         {tab}
       </Text>
@@ -74,7 +77,7 @@ function renderTabButton(
 const styles = StyleSheet.create({
   appContainer: {
     flex: 1,
-    backgroundColor: "#F9FAFB",
+    backgroundColor: "#FFF8F5",
   },
   screenContainer: {
     flex: 1,
@@ -83,24 +86,37 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    paddingVertical: 10,
+    paddingTop: 8,
+    paddingBottom: 20,
     borderTopWidth: 1,
-    borderTopColor: "#E5E7EB",
+    borderTopColor: "#F3F4F6",
     backgroundColor: "#FFFFFF",
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: -2 },
+    elevation: 8,
   },
   tabButton: {
     alignItems: "center",
     flex: 1,
+    paddingVertical: 4,
+  },
+  tabIconContainer: {
+    padding: 6,
+    borderRadius: 8,
+  },
+  tabIconContainerActive: {
+    backgroundColor: "#FFF0EB",
   },
   tabLabel: {
-    fontSize: 10,
+    fontSize: 11,
     color: "#9CA3AF",
-    marginTop: 2,
+    marginTop: 4,
+    fontWeight: "500",
   },
   tabLabelActive: {
-    color: "#111827",
-    fontWeight: "600",
+    color: "#FF6B35",
+    fontWeight: "700",
   },
 });
-
-
