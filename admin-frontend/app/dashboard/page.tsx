@@ -77,8 +77,19 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <img src="/Untitled design (4).png" alt="LocalLoop" className="h-7" />
+          <div className="flex items-center justify-between h-20 py-2">
+            <div className="h-16 overflow-hidden flex items-center" style={{ width: '300px' }}>
+              <img 
+                src="/ChatGPT Image Dec 17, 2025, 02_36_01 PM (1).png" 
+                alt="LocalLoop" 
+                className="w-full h-auto object-cover" 
+                style={{ 
+                  objectPosition: 'center 50%',
+                  transform: 'scale(2.5)',
+                  transformOrigin: 'center center'
+                }} 
+              />
+            </div>
             <button
               onClick={handleLogout}
               className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors"

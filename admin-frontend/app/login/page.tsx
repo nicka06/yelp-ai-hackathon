@@ -101,7 +101,7 @@ export default function LoginPage() {
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <Link href="/" className="inline-block mb-8">
-            <img src="/Untitled design (4).png" alt="LocalLoop" className="h-8 mx-auto" />
+            <img src="/ChatGPT Image Dec 17, 2025, 02_36_01 PM (1).png" alt="LocalLoop" className="h-8 mx-auto" />
           </Link>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
             {isSignUp ? "Create your account" : "Sign in to your account"}
