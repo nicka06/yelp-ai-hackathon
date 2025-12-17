@@ -35,7 +35,7 @@ export default function ProfileScreen() {
               <View style={styles.settingInfo}>
                 <Text style={styles.settingLabel}>AI Phone Calls</Text>
                 <Text style={styles.settingDescription}>
-                  Receive calls from our AI concierge
+                  Receive personalized offers from nearby restaurants
                 </Text>
               </View>
             </View>

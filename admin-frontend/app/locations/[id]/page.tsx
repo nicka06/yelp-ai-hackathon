@@ -65,10 +65,6 @@ export default function LocationDetailPage() {
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    loadLocationData();
-  }, [locationId]);
-
   const loadLocationData = async () => {
     try {
       setLoading(true);
@@ -124,6 +120,11 @@ export default function LocationDetailPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadLocationData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locationId]);
 
   const handleSaveStatus = async () => {
     if (!locationData) return;
@@ -217,37 +218,40 @@ export default function LocationDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <header className="glass border-b border-gray-200/50 sticky top-0 z-50 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <button
             onClick={() => router.push("/dashboard")}
-            className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-4 transition-colors"
+            className="flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-gray-900 mb-4 transition-colors px-3 py-2 rounded-lg hover:bg-gray-100"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Dashboard</span>
           </button>
-          <div className="flex items-center justify-between pb-4">
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-semibold text-gray-900">{locationData.name}</h1>
-              <p className="text-sm text-gray-600 mt-1">{locationData.address}</p>
+              <h1 className="text-3xl font-bold text-gray-900">{locationData.name}</h1>
+              <p className="text-base text-gray-600 mt-2 flex items-center gap-2">
+                <MapPin className="w-4 h-4" />
+                {locationData.address}
+              </p>
             </div>
             <button
               onClick={() => setStatus(status === "active" ? "paused" : "active")}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold transition-all duration-300 shadow-soft hover:shadow-soft-lg ${
                 status === "active"
-                  ? "bg-green-50 text-green-700 border border-green-200 hover:bg-green-100"
-                  : "bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100"
+                  ? "bg-gradient-to-r from-success-100 to-success-50 text-success-700 border-2 border-success-300 hover:-translate-y-0.5"
+                  : "bg-gradient-to-r from-gray-100 to-gray-50 text-gray-700 border-2 border-gray-300 hover:-translate-y-0.5"
               }`}
             >
               {status === "active" ? (
                 <>
-                  <ToggleRight className="w-4 h-4" />
+                  <ToggleRight className="w-5 h-5" />
                   Active
                 </>
               ) : (
                 <>
-                  <ToggleLeft className="w-4 h-4" />
+                  <ToggleLeft className="w-5 h-5" />
                   Paused
                 </>
               )}
@@ -256,95 +260,106 @@ export default function LocationDetailPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-white rounded-lg border border-gray-200">
-          <div className="flex border-b border-gray-200">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-soft overflow-hidden">
+          <div className="flex border-b border-gray-200 bg-gradient-to-r from-gray-50 to-transparent">
             {tabs.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-6 py-3 text-sm font-medium transition-colors relative ${
+                className={`px-8 py-4 text-sm font-bold transition-all duration-300 relative ${
                   activeTab === tab
-                    ? "text-primary-600 border-b-2 border-primary-600"
-                    : "text-gray-600 hover:text-gray-900"
+                    ? "text-primary-600 bg-white"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                 }`}
               >
                 {tab}
+                {activeTab === tab && (
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-600 to-primary-700 rounded-t-full" />
+                )}
               </button>
             ))}
           </div>
 
-          <div className="p-6">
+          <div className="p-8">
             {error && (
-              <div className="mb-6 bg-red-50 border border-red-200 rounded-md p-4 flex items-start gap-3">
+              <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3 animate-slide-down">
                 <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-red-800">{error}</p>
+                <p className="text-sm text-red-800 leading-relaxed">{error}</p>
               </div>
             )}
 
             {activeTab === "Overview" && (
-              <div className="space-y-6">
+              <div className="space-y-8">
                 <div>
-                  <h3 className="text-base font-semibold text-gray-900 mb-2">Description</h3>
-                  <p className="text-sm text-gray-600">
+                  <h3 className="text-lg font-bold text-gray-900 mb-3">Description</h3>
+                  <p className="text-base text-gray-600 leading-relaxed">
                     {locationData.description || "No description provided"}
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-gray-50 rounded-md border border-gray-200 p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <MapPin className="w-4 h-4 text-gray-500" />
-                      <span className="text-xs font-medium text-gray-600 uppercase tracking-wide">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="group bg-gradient-to-br from-primary-50 to-white rounded-2xl border-2 border-primary-100 p-6 hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl flex items-center justify-center shadow-soft">
+                        <MapPin className="w-5 h-5 text-white" strokeWidth={2.5} />
+                      </div>
+                      <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">
                         Visitors
                       </span>
                     </div>
-                    <p className="text-2xl font-semibold text-gray-900">0</p>
-                    <p className="text-xs text-gray-500 mt-1">Last 7 days</p>
+                    <p className="text-3xl font-bold text-gray-900">0</p>
+                    <p className="text-sm text-gray-600 mt-2 font-medium">Last 7 days</p>
                   </div>
 
-                  <div className="bg-gray-50 rounded-md border border-gray-200 p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <MessageSquare className="w-4 h-4 text-gray-500" />
-                      <span className="text-xs font-medium text-gray-600 uppercase tracking-wide">
+                  <div className="group bg-gradient-to-br from-success-50 to-white rounded-2xl border-2 border-success-100 p-6 hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-success-500 to-success-600 rounded-xl flex items-center justify-center shadow-soft">
+                        <MessageSquare className="w-5 h-5 text-white" strokeWidth={2.5} />
+                      </div>
+                      <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">
                         SMS Sent
                       </span>
                     </div>
-                    <p className="text-2xl font-semibold text-gray-900">0</p>
-                    <p className="text-xs text-gray-500 mt-1">Last 7 days</p>
+                    <p className="text-3xl font-bold text-gray-900">0</p>
+                    <p className="text-sm text-gray-600 mt-2 font-medium">Last 7 days</p>
                   </div>
 
-                  <div className="bg-gray-50 rounded-md border border-gray-200 p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Mail className="w-4 h-4 text-gray-500" />
-                      <span className="text-xs font-medium text-gray-600 uppercase tracking-wide">
+                  <div className="group bg-gradient-to-br from-warning-50 to-white rounded-2xl border-2 border-warning-100 p-6 hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-warning-500 to-warning-600 rounded-xl flex items-center justify-center shadow-soft">
+                        <Mail className="w-5 h-5 text-white" strokeWidth={2.5} />
+                      </div>
+                      <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">
                         Emails Sent
                       </span>
                     </div>
-                    <p className="text-2xl font-semibold text-gray-900">0</p>
-                    <p className="text-xs text-gray-500 mt-1">Last 7 days</p>
+                    <p className="text-3xl font-bold text-gray-900">0</p>
+                    <p className="text-sm text-gray-600 mt-2 font-medium">Last 7 days</p>
                   </div>
                 </div>
               </div>
             )}
 
             {activeTab === "Geofence" && (
-              <div className="space-y-6">
+              <div className="space-y-8">
                 <div>
-                  <h3 className="text-base font-semibold text-gray-900 mb-4">
+                  <h3 className="text-lg font-bold text-gray-900 mb-5">
                     Define Geofence Area
                   </h3>
-                  <GeofenceMapClient
-                    center={mapCenter}
-                    radius={geofenceRadius}
-                    onRadiusChange={setGeofenceRadius}
-                    onCenterChange={setMapCenter}
-                  />
+                  <div className="rounded-2xl overflow-hidden border-2 border-gray-200 shadow-soft">
+                    <GeofenceMapClient
+                      center={mapCenter}
+                      radius={geofenceRadius}
+                      onRadiusChange={setGeofenceRadius}
+                      onCenterChange={setMapCenter}
+                    />
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <div className="bg-gradient-to-br from-primary-50 to-white p-6 rounded-2xl border-2 border-primary-100">
+                    <label className="block text-sm font-bold text-gray-700 mb-4">
                       Radius (meters)
                     </label>
                     <input
@@ -354,17 +369,17 @@ export default function LocationDetailPage() {
                       step="10"
                       value={geofenceRadius}
                       onChange={(e) => setGeofenceRadius(Number(e.target.value))}
-                      className="w-full"
+                      className="w-full accent-primary-600"
                     />
-                    <div className="mt-2 text-center">
-                      <span className="text-xl font-semibold text-primary-600">
+                    <div className="mt-4 text-center">
+                      <span className="text-3xl font-bold bg-gradient-to-r from-primary-600 to-primary-700 bg-clip-text text-transparent">
                         {geofenceRadius}m
                       </span>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-bold text-gray-700 mb-3">
                       Latitude
                     </label>
                     <input
@@ -373,13 +388,13 @@ export default function LocationDetailPage() {
                       onChange={(e) =>
                         setMapCenter([Number(e.target.value), mapCenter[1]])
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-sm transition-all"
                       step="0.000001"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-bold text-gray-700 mb-3">
                       Longitude
                     </label>
                     <input
@@ -388,7 +403,7 @@ export default function LocationDetailPage() {
                       onChange={(e) =>
                         setMapCenter([mapCenter[0], Number(e.target.value)])
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-sm transition-all"
                       step="0.000001"
                     />
                   </div>
@@ -397,9 +412,9 @@ export default function LocationDetailPage() {
                 <button
                   onClick={handleSaveGeofence}
                   disabled={saving}
-                  className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center gap-2 bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Save className="w-4 h-4" />
+                  <Save className="w-5 h-5" />
                   {saving ? "Saving..." : "Save Geofence"}
                 </button>
               </div>

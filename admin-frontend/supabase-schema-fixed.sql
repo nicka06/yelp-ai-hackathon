@@ -1,4 +1,4 @@
--- Restaurant Concierge Database Schema (Fixed)
+-- LocalLoop Database Schema (Fixed)
 -- Run this in your Supabase SQL Editor
 
 -- Enable UUID extension

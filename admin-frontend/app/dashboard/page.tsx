@@ -22,10 +22,6 @@ export default function DashboardPage() {
   const [locations, setLocations] = useState<Location[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
   const checkAuth = async () => {
     const { data: { session } } = await supabase.auth.getSession();
     
@@ -37,6 +33,11 @@ export default function DashboardPage() {
       router.push("/login");
     }
   };
+
+  useEffect(() => {
+    checkAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const loadLocations = async (userId: string) => {
     try {
@@ -56,8 +57,11 @@ export default function DashboardPage() {
 
   if (!authenticated || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-600 text-sm">Loading...</p>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin" />
+          <p className="text-gray-600 font-medium">Loading dashboard...</p>
+        </div>
       </div>
     );
   }
@@ -74,15 +78,10 @@ export default function DashboardPage() {
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-primary-600 rounded flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-white" />
-              </div>
-              <h1 className="text-xl font-semibold text-gray-900">Dashboard</h1>
-            </div>
+            <img src="/Untitled design (4).png" alt="LocalLoop" className="h-7" />
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 text-sm text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors"
+              className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors"
             >
               <LogOut className="w-4 h-4" />
               <span>Sign Out</span>
@@ -92,45 +91,28 @@ export default function DashboardPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-10 h-10 bg-primary-50 rounded-md flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-primary-600" />
-              </div>
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">Dashboard</h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <h3 className="text-sm font-medium text-gray-600 mb-2">Locations</h3>
+              <p className="text-3xl font-bold text-gray-900">{totalLocations}</p>
             </div>
-            <h3 className="text-sm font-medium text-gray-600 mb-1">Total Locations</h3>
-            <p className="text-2xl font-semibold text-gray-900">{totalLocations}</p>
-          </div>
 
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-10 h-10 bg-blue-50 rounded-md flex items-center justify-center">
-                <Users className="w-5 h-5 text-blue-600" />
-              </div>
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <h3 className="text-sm font-medium text-gray-600 mb-2">Visitors Today</h3>
+              <p className="text-3xl font-bold text-gray-900">{totalVisitors}</p>
             </div>
-            <h3 className="text-sm font-medium text-gray-600 mb-1">Visitors Today</h3>
-            <p className="text-2xl font-semibold text-gray-900">{totalVisitors}</p>
-          </div>
 
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-10 h-10 bg-green-50 rounded-md flex items-center justify-center">
-                <MessageSquare className="w-5 h-5 text-green-600" />
-              </div>
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <h3 className="text-sm font-medium text-gray-600 mb-2">SMS Sent</h3>
+              <p className="text-3xl font-bold text-gray-900">{totalSms}</p>
             </div>
-            <h3 className="text-sm font-medium text-gray-600 mb-1">SMS Sent</h3>
-            <p className="text-2xl font-semibold text-gray-900">{totalSms}</p>
-          </div>
 
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-10 h-10 bg-purple-50 rounded-md flex items-center justify-center">
-                <Mail className="w-5 h-5 text-purple-600" />
-              </div>
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <h3 className="text-sm font-medium text-gray-600 mb-2">Emails Sent</h3>
+              <p className="text-3xl font-bold text-gray-900">{totalEmails}</p>
             </div>
-            <h3 className="text-sm font-medium text-gray-600 mb-1">Emails Sent</h3>
-            <p className="text-2xl font-semibold text-gray-900">{totalEmails}</p>
           </div>
         </div>
 
@@ -139,7 +121,7 @@ export default function DashboardPage() {
             <h2 className="text-lg font-semibold text-gray-900">Locations</h2>
             <Link
               href="/locations/new"
-              className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-primary-700 transition-colors"
+              className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
             >
               <Plus className="w-4 h-4" />
               Add Location
@@ -148,19 +130,16 @@ export default function DashboardPage() {
 
           {locations.length === 0 ? (
             <div className="p-12 text-center">
-              <div className="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center mx-auto mb-4">
-                <MapPin className="w-6 h-6 text-gray-400" />
-              </div>
-              <h3 className="text-base font-medium text-gray-900 mb-1">No locations yet</h3>
+              <h3 className="text-base font-semibold text-gray-900 mb-2">No locations yet</h3>
               <p className="text-sm text-gray-600 mb-6">
                 Get started by adding your first restaurant location.
               </p>
               <Link
                 href="/locations/new"
-                className="inline-flex items-center gap-2 bg-primary-600 text-white px-4 py-2.5 rounded-md text-sm font-medium hover:bg-primary-700 transition-colors"
+                className="inline-flex items-center gap-2 bg-primary-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
               >
                 <Plus className="w-4 h-4" />
-                Add Your First Location
+                Add Location
               </Link>
             </div>
           ) : (
@@ -168,16 +147,16 @@ export default function DashboardPage() {
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                       Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                       Address
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                       Created
                     </th>
                   </tr>
@@ -197,7 +176,7 @@ export default function DashboardPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          className={`px-2.5 py-1 rounded-full text-xs font-medium ${
                             location.status === "active"
                               ? "bg-green-100 text-green-700"
                               : "bg-gray-100 text-gray-700"

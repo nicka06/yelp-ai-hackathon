@@ -100,34 +100,31 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
-            <div className="w-8 h-8 bg-primary-600 rounded flex items-center justify-center">
-              <MapPin className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-semibold text-gray-900">Restaurant Concierge</span>
+          <Link href="/" className="inline-block mb-8">
+            <img src="/Untitled design (4).png" alt="LocalLoop" className="h-8 mx-auto" />
           </Link>
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
             {isSignUp ? "Create your account" : "Sign in to your account"}
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            {isSignUp ? "Or" : "Don't have an account?"}{" "}
+          <p className="text-sm text-gray-600">
+            {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
             <button
               onClick={() => {
                 setIsSignUp(!isSignUp);
                 setError("");
               }}
-              className="font-medium text-primary-600 hover:text-primary-700"
+              className="font-medium text-primary-600 hover:text-primary-700 transition-colors"
             >
-              {isSignUp ? "sign in" : "sign up"}
+              {isSignUp ? "Sign in" : "Sign up"}
             </button>
           </p>
         </div>
 
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-8">
           {error && (
-            <div className="mb-6 bg-red-50 border border-red-200 rounded-md p-4 flex items-start gap-3">
+            <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3 animate-slide-down">
               <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-red-800">{error}</p>
+              <p className="text-sm text-red-800 leading-relaxed">{error}</p>
             </div>
           )}
 
@@ -136,40 +133,34 @@ export default function LoginPage() {
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
                 Email address
               </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
-                  placeholder="you@example.com"
-                />
-              </div>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+                placeholder="you@example.com"
+              />
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1.5">
                 Password
               </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete={isSignUp ? "new-password" : "current-password"}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
-                  placeholder="••••••••"
-                />
-              </div>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete={isSignUp ? "new-password" : "current-password"}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+                placeholder="••••••••"
+              />
             </div>
 
             {isSignUp && (
@@ -180,38 +171,35 @@ export default function LoginPage() {
                 >
                   Confirm Password
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type="password"
-                    autoComplete="new-password"
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
-                    placeholder="••••••••"
-                  />
-                </div>
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  autoComplete="new-password"
+                  required
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+                  placeholder="••••••••"
+                />
               </div>
             )}
 
             {!isSignUp && (
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between pt-1">
                 <div className="flex items-center">
                   <input
                     id="remember-me"
                     name="remember-me"
                     type="checkbox"
-                    className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-primary-600 focus:ring-2 focus:ring-primary-500 border-gray-300 rounded transition-all"
                   />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                  <label htmlFor="remember-me" className="ml-2.5 block text-sm font-medium text-gray-700">
                     Remember me
                   </label>
                 </div>
                 <div className="text-sm">
-                  <a href="#" className="font-medium text-primary-600 hover:text-primary-700">
+                  <a href="#" className="font-semibold text-primary-600 hover:text-primary-700 transition-colors">
                     Forgot password?
                   </a>
                 </div>

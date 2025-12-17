@@ -60,7 +60,7 @@ export default function HomeScreen() {
         <View style={styles.headerTop}>
           <View>
             <Text style={styles.headerLocation}>Today in Ann Arbor</Text>
-            <Text style={styles.headerTitle}>Restaurant Concierge</Text>
+            <Text style={styles.headerTitle}>LocalLoop</Text>
           </View>
           <View style={styles.liveBadge}>
             <View style={styles.liveDot} />

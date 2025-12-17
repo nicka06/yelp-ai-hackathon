@@ -1,4 +1,4 @@
-# Restaurant Concierge v2 – Architecture & Plan
+# LocalLoop – Architecture & Plan
 
 This repo is a **blueprint**, not an implementation (yet). It defines what we’re going to build:
 

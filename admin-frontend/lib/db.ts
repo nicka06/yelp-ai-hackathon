@@ -181,8 +181,8 @@ export async function getEventStats(locationId: string, days: number = 30) {
     if (!stats[date]) {
       stats[date] = { sms: 0, email: 0 };
     }
-    if (event.event_type === "notification_sent") {
-      stats[date][event.channel]++;
+    if (event.event_type === "notification_sent" && (event.channel === "sms" || event.channel === "email")) {
+      stats[date][event.channel as "sms" | "email"]++;
     }
   });
 

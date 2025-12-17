@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "leaflet/dist/leaflet.css";
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -11,7 +13,7 @@
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
     --ring: 0 0% 3.9%;
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 }
 
@@ -20,6 +22,33 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Better focus visibility */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+  }
+}
+
+@layer utilities {
+  /* Glass morphism effect */
+  .glass {
+    @apply bg-white/80 backdrop-blur-xl;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-600 to-primary-700 bg-clip-text text-transparent;
+  }
+
+  /* Hover lift effect */
+  .hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg;
   }
 }

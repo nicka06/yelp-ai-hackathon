@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Restaurant Concierge",
-    "slug": "restaurant-concierge",
+    "name": "LocalLoop",
+    "slug": "localloop",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
@@ -10,10 +10,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.restaurantconcierge.app",
+      "bundleIdentifier": "com.localloop.app",
     },
     "android": {
-      "package": "com.restaurantconcierge.app"
+      "package": "com.localloop.app"
     },
     "plugins": []
   }

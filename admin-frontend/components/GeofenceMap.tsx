@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { MapContainer, TileLayer, Circle, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 
@@ -41,11 +40,6 @@ export default function GeofenceMap({
   onRadiusChange,
   onCenterChange,
 }: GeofenceMapProps) {
-  useEffect(() => {
-    // Import Leaflet CSS dynamically
-    import("leaflet/dist/leaflet.css");
-  }, []);
-
   return (
     <div className="w-full h-[500px] rounded-lg overflow-hidden border border-slate-300 shadow-lg">
       <MapContainer

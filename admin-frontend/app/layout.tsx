@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Restaurant Concierge Admin",
+  title: "LocalLoop Admin",
   description: "Control panel for restaurant owners",
 };
 
